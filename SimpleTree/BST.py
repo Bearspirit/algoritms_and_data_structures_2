@@ -121,4 +121,3 @@ class BST:
             new_Node.Parent.LeftChild = new_Node.RightChild
             return True
         # удаляем узел по ключу
-        
