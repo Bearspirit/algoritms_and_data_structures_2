@@ -121,3 +121,12 @@ class BST:
             new_Node.Parent.LeftChild = new_Node.RightChild
             return True
         # удаляем узел по ключу
+    def Count(self):
+        def RecursionNode(Node):
+            if Node:
+                self.count += 1
+                RecursionNode(Node.LeftChild)
+                RecursionNode(Node.RightChild)
+        self.count = 0
+        RecursionNode(self.Root)
+        return self.count
