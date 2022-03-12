@@ -43,7 +43,7 @@ class BST:
     def AddKeyValue(self, key, val):
         find_result = self.FindNodeByKey(key)
         new_Node = BSTNode(key, val, None)
-        if find_result.Node == None:
+        if find_result.Node is None:
             self.Root = new_Node
             return True
         if find_result.ToLeft == True:
@@ -58,8 +58,8 @@ class BST:
   
     def FinMinMax(self, FromNode, FindMax):
         find_result = FromNode
-        if find_result == None:
-            return None
+        if find_result is None:
+            find_result = self.Root
         if FindMax:
             while find_result.RightChild:
                 find_result = find_result.RightChild
@@ -71,57 +71,59 @@ class BST:
         # ищем максимальный/минимальный ключ в поддереве
         # возвращается объект типа BSTNode
 	
+    def ParentLeftChild(self, ReceivingNode, NodeToDelete):
+            if ReceivingNode.LeftChild == NodeToDelete:
+                return True 
+            return False
+
     def DeleteNodeByKey(self, key):
-        find_del_Node = self.FindNodeByKey(key)
-        if find_del_Node.NodeHasKey == False:
-            return False # если узел не найден
-        if find_del_Node.Node.LeftChild == None and find_del_Node.Node.RightChild == None:
-            if find_del_Node.Node.Parent.LeftChild == find_del_Node.Node:
-                find_del_Node.Node.Parent.LeftChild == None
-            if find_del_Node.Node.Parent.RightChild == find_del_Node.Node:
-                find_del_Node.Node.Parent.RightChild == None
-            find_del_Node.Node.NodeKey = None
-            find_del_Node.Node.NodeValue = None
-            find_del_Node.Node.Parent = None
-            return True
-        if find_del_Node.Node.LeftChild == None:
-            if find_del_Node.Node.Parent.LeftChild == find_del_Node.Node:
-                find_del_Node.Node.Parent.LeftChild == find_del_Node.Node.RightChild
-            if find_del_Node.Node.Parent.RightChild == find_del_Node.Node:
-                find_del_Node.Node.Parent.RightChild == find_del_Node.Node.RightChild
-            find_del_Node.Node.NodeKey = find_del_Node.Node.RightChild.NodeKey
-            find_del_Node.Node.NodeValue = find_del_Node.Node.RightChild.NodeValue
-            find_del_Node.Node.RightChild.Parent = find_del_Node.Node.Parent
-            find_del_Node.Node.Parent = None
-            return True
-        if find_del_Node.Node.RightChild == None:
-            if find_del_Node.Node.Parent.LeftChild == find_del_Node.Node:
-                find_del_Node.Node.Parent.LeftChild == find_del_Node.Node.LeftChild
-            if find_del_Node.Node.Parent.RightChild == find_del_Node.Node:
-                find_del_Node.Node.Parent.RightChild == find_del_Node.Node.LeftChild
-            find_del_Node.Node.NodeKey = find_del_Node.Node.LeftChild.NodeKey
-            find_del_Node.Node.NodeValue = find_del_Node.Node.LeftChild.NodeValue
-            find_del_Node.Node.LeftChild.Parent = find_del_Node.Node.Parent
-            find_del_Node.Node.Parent = None
-            return True
-        right_child = find_del_Node.Node.RightChild
-        new_Node = self.FinMinMax(right_child, False)
-        if new_Node.RightChild == None:
-            new_Node.Parent.LeftChhild = None
-            find_del_Node.Node.NodeKey = new_Node.NodeKey
-            find_del_Node.Node.NodeValue = new_Node.NodeValue
-            new_Node.NodeKey = None
-            new_Node.NodeValue = None
-            new_Node.Parent = None
-            return True
+        NodeToDelete = self.FindNodeByKey(key)
+        if not NodeToDelete.NodeHasKey: 
+            return False   
+        NodeToDelete = NodeToDelete.Node 
+        if not NodeToDelete.LeftChild and not NodeToDelete.RightChild:
+            if not NodeToDelete.Parent: 
+                self.Root = None
+            else:
+                ParentNode = NodeToDelete.Parent
+                if self.ParentLeftChild(ParentNode, NodeToDelete):
+                    ParentNode.LeftChild = None
+                else: 
+                    ParentNode.RightChild = None
         else:
-            find_del_Node.Node.NodeKey = new_Node.NodeKey
-            find_del_Node.Node.NodeValue = new_Node.NodeValue
-            new_Node.RightChild.Parent = new_Node.Parent
-            new_Node.Parent.LeftChild = new_Node.RightChild
-            return True
+            if NodeToDelete.LeftChild and NodeToDelete.RightChild:
+                ReceivingNode = NodeToDelete.RightChild
+                if ReceivingNode.LeftChild:
+                    ReceivingNode = self.FinMinMax(ReceivingNode,False)
+                    if ReceivingNode.RightChild:
+                        ReceivingNode.RightChild.Parent = ReceivingNode.Parent
+                        ReceivingNode.Parent.LeftChild = ReceivingNode.RightChild
+                    else: 
+                        ReceivingNode.Parent.LeftChild = None
+                    ReceivingNode.RightChild = NodeToDelete.RightChild
+                    NodeToDelete.RightChild.Parent = ReceivingNode
+                NodeToDelete.LeftChild.Parent = ReceivingNode
+                ReceivingNode.LeftChild = NodeToDelete.LeftChild
+            elif NodeToDelete.RightChild:
+                ReceivingNode = NodeToDelete.RightChild
+            else: 
+                ReceivingNode = NodeToDelete.LeftChild               
+            if NodeToDelete.Parent:
+                ReceivingNode.Parent = NodeToDelete.Parent
+                ParentNode = NodeToDelete.Parent
+                if self.ParentLeftChild(ParentNode,NodeToDelete): 
+                    ParentNode.LeftChild = ReceivingNode
+                else: 
+                    ParentNode.RightChild = ReceivingNode
+            else:
+                self.Root = ReceivingNode
+                ReceivingNode.Parent = None
+        NodeToDelete.Parent = None
+        NodeToDelete.LeftChild = None
+        NodeToDelete.RightChild = None
+        return True
         # удаляем узел по ключу
-        
+
     def Count(self):
         def recurs_for_count(Node):
             if Node:
@@ -131,3 +133,4 @@ class BST:
         self.count = 0
         recurs_for_count(self.Root)
         return self.count
+

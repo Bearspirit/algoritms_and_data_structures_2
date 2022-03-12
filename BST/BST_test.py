@@ -112,8 +112,8 @@ class DefTest(unittest.TestCase):
         self.assertEqual(self.my_tree.Count(), 16)
 
     def test_FinMinMax(self):
-        #min_root = self.my_tree.FinMinMax(None, False)
-        #max_root = self.my_tree.FinMinMax(None, True)
+        min_root = self.my_tree.FinMinMax(None, False)
+        max_root = self.my_tree.FinMinMax(None, True)
         self.assertEqual(min_root, self.Node_1)
         self.assertEqual(max_root, self.Node_15)
 
