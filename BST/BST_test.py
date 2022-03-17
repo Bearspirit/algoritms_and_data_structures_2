@@ -1,5 +1,5 @@
 import unittest
-from BST import *
+from bs import *
 
 class DefTest(unittest.TestCase):
 
