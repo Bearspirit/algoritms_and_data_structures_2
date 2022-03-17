@@ -160,14 +160,14 @@ class BST:
                 in_order_recurs(Node.RightChild, nodes_list)
         def post_order_recurs(Node, nodes_list):
             if Node:
-                in_order_recurs(Node.LeftChild, nodes_list)
-                in_order_recurs(Node.RightChild, nodes_list)
+                post_order_recurs(Node.LeftChild, nodes_list)
+                post_order_recurs(Node.RightChild, nodes_list)
                 nodes_list.append(Node)
         def pre_order_recurs(Node, nodes_list):
             if Node:
                 nodes_list.append(Node)
-                in_order_recurs(Node.LeftChild, nodes_list)
-                in_order_recurs(Node.RightChild, nodes_list)
+                pre_order_recurs(Node.LeftChild, nodes_list)
+                pre_order_recurs(Node.RightChild, nodes_list)
                 
         nodes_list = []
         if parametr == 0:
@@ -177,5 +177,3 @@ class BST:
         else:
             pre_order_recurs(self.Root, nodes_list)
         return tuple(nodes_list)
-
-
