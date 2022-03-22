@@ -23,12 +23,15 @@ class aBST:
     def AddKey(self, key):
         # добавляем ключ в массив
         index = self.FindKeyIndex(key)
+        if index == None:
+            return -1
         if index == 0:
             if self.Tree[index] == None:
                 self.Tree[index] = key
-                return index
+            return index
         if index < 0:
             self.Tree[index*-1] = key
             return index*-1
-        return -1 
+        if index > 0:
+            return index
         # индекс добавленного/существующего ключа или -1 если не удалось

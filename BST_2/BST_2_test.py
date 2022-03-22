@@ -22,12 +22,15 @@ class DefTest(unittest.TestCase):
         self.assertEqual(self.bin_tree.FindKeyIndex(77), -13)
         self.bin_tree.AddKey(77)
         self.assertEqual(self.bin_tree.FindKeyIndex(77), 13)
+        self.assertEqual(self.bin_tree.AddKey(92), 14)
 
     def test_find_and_add(self):
         fst_index = self.empty_tree.FindKeyIndex(50)
         scd_index = self.empty_tree.FindKeyIndex(75)
         self.assertEqual(fst_index, 0)
         self.assertEqual(scd_index, 0)
+        self.assertEqual(self.empty_tree.AddKey(50), 0)
+        self.assertEqual(self.empty_tree.AddKey(75), -1)
 
     def test_add_in_bin_tree(self):
         self.bin_tree.AddKey(50)
