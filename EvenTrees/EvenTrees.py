@@ -89,4 +89,3 @@ class SimpleTree:
             return count
         tree_count(self.Root, disconnect_list)
         return disconnect_list
-
