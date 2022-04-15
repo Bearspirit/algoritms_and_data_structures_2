@@ -1,5 +1,5 @@
 import unittest
-from DepthFirstSearch import *
+from BreadthFirstSearch import *
 
 class DefTest(unittest.TestCase):
     def setUp(self):
